@@ -1,7 +1,8 @@
 .env
 __pycache__/
 *.pyc
-.idea/
-.vscode/
-.venv/
-poetry.lock # (если используете Poetry, но лучше не игнорировать)
+.pytest_cache/
+chroma_data/
+alembic/versions/*.py
+!alembic/versions/.keep
+poetry.lock
