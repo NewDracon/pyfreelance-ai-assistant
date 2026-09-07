@@ -1,22 +1,25 @@
 from pydantic_settings import BaseSettings
-import os
+from pydantic import ConfigDict
 
 class Settings(BaseSettings):
+    # Новая конфигурация для Pydantic v2
+    model_config = ConfigDict(
+        extra='ignore',          # игнорировать лишние переменные в .env
+        env_file='.env',
+        env_file_encoding='utf-8'
+    )
+
     DATABASE_URL: str
     OPENAI_API_KEY: str
     OPENAI_BASE_URL: str = "https://routerai.ru/api/v1"
     LLM_MODEL: str = "qwen/qwen3.7-flash"
-    EMBEDDING_MODEL: str = "voyageai/voyage-4-lite"
+    EMBEDDING_MODEL: str = "text-embedding-ada-002"
     CHROMA_PERSIST_DIR: str = "./chroma_data"
     API_KEY: str
 
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
-
 settings = Settings()
 
-# Промт для LLM (хранится здесь, можно править без перезапуска)
+# Промт шаблон (можно оставить здесь)
 PROMPT_TEMPLATE = """Ты — эксперт по фриланс-заказам в сфере IT. Твоя задача — определить, относится ли заказ к разработке на Python или к AI/машинному обучению, и если да, то классифицировать его по одной из категорий.
 
 **Релевантными считаются заказы, в которых требуется:**
@@ -38,7 +41,7 @@ PROMPT_TEMPLATE = """Ты — эксперт по фриланс-заказам 
 Проанализируй заказ и верни строго JSON с полями:
 {
   "is_relevant": true/false,
-  "category": "Backend API на Python|базы данных|NLP, машинное обучение|скрипты и автоматизация|Python-развертывание, devops|парсинг|AI-агенты|чат-боты|другое",
+  "category": "backend_api|data_processing|ml_nlp|automation|devops|web_scraping|chatbots_ai_agents|other",
   "category_confidence": 0.0-1.0,
   "questions": ["string"],   // 3–5 вопросов, которые стоит задать заказчику (если is_relevant = true, иначе пустой массив)
   "popularity_score": 0.5,   // временное значение (будет пересчитано позже)
