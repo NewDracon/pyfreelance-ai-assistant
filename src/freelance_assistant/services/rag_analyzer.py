@@ -24,7 +24,9 @@ class RAGAnalyzer:
         text = text[:8000]
         response = await self.openai.embeddings.create(
             model=self.embedding_model,
-            input=text
+            input=text,
+            dimensions=512,  # Опционально: 256, 512, 1024 (по умолчанию), 2048
+            encoding_format="float"
         )
         return response.data[0].embedding
 
