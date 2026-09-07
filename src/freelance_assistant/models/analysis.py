@@ -1,10 +1,8 @@
 from sqlalchemy import Column, String, Boolean, Float, TIMESTAMP, JSON, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
 import uuid
-
-Base = declarative_base()
+from . import Base   # <-- импорт общего Base
 
 class OrderAnalysis(Base):
     __tablename__ = "order_analyses"
@@ -14,7 +12,7 @@ class OrderAnalysis(Base):
     is_relevant = Column(Boolean)
     category = Column(String(100))
     category_confidence = Column(Float)
-    questions = Column(JSON)          # список строк
+    questions = Column(JSON)
     popularity_score = Column(Float)
     estimated_demand = Column(String(20))
     avg_response_time_days = Column(Float)

@@ -1,9 +1,7 @@
 from sqlalchemy import Column, String, Text, TIMESTAMP, Boolean, Integer
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
-from sqlalchemy.ext.declarative import declarative_base
 import uuid
-
-Base = declarative_base()
+from . import Base   # <-- импорт общего Base
 
 class Order(Base):
     __tablename__ = "orders"

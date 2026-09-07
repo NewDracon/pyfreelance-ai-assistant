@@ -10,7 +10,7 @@ from pathlib import Path
 # Добавляем путь к src для импорта моделей
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from freelance_assistant.models.analysis import Base
+from freelance_assistant.models import Base
 from freelance_assistant.core.config import settings
 
 config = context.config
