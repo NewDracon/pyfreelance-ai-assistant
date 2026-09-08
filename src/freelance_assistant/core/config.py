@@ -39,15 +39,15 @@ PROMPT_TEMPLATE = """Ты — эксперт по фриланс-заказам 
 - Заказы, не связанные с программированием (например, перевод, видеомонтаж)
 
 Проанализируй заказ и верни строго JSON с полями:
-{
+{{
   "is_relevant": true/false,
-  "category": "backend_api|data_processing|ml_nlp|automation|devops|web_scraping|chatbots_ai_agents|other",
+  "category": "Backend API на Python|базы данных|NLP, машинное обучение|скрипты и автоматизация|Python-развертывание, devops|парсинг|AI-агенты|чат-боты|другое",
   "category_confidence": 0.0-1.0,
   "questions": ["string"],   // 3–5 вопросов, которые стоит задать заказчику (если is_relevant = true, иначе пустой массив)
   "popularity_score": 0.5,   // временное значение (будет пересчитано позже)
   "estimated_demand": "medium", // временное значение
   "avg_response_time_days": 5   // временное значение
-}
+}}
 
 Ниже приведены примеры похожих заказов с их категориями (используй их как подсказку):
 {examples}

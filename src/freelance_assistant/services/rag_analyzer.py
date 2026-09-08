@@ -90,18 +90,20 @@ class RAGAnalyzer:
         avg_answers = stats['avg_answers']
         avg_taken_days = stats['avg_taken_days']
 
+        # Подзапрос: количество заказов по каждой категории за последние 30 дней
+        subq = select(
+            OrderAnalysis.category,
+            func.count().label('category_count')
+        ).join(Order, Order.id == OrderAnalysis.order_id) \
+            .where(Order.published_at >= (datetime.utcnow() - timedelta(days=30))) \
+            .group_by(OrderAnalysis.category) \
+            .subquery()
+
+        # Получаем максимальное количество среди всех категорий
         max_count_stmt = select(
             func.max(subq.c.category_count)
-        ).select_from(
-            select(
-                OrderAnalysis.category,
-                func.count().label('category_count')
-            )
-            .join(Order, Order.id == OrderAnalysis.order_id)
-            .where(Order.published_at >= (datetime.utcnow() - timedelta(days=30)))
-            .group_by(OrderAnalysis.category)
-            .subquery('subq')
-        )
+        ).select_from(subq)
+
         max_result = await self.session.execute(max_count_stmt)
         max_count = max_result.scalar() or 1
 
