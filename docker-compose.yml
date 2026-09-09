@@ -13,6 +13,7 @@ services:
       EMBEDDING_MODEL: ${EMBEDDING_MODEL}
       CHROMA_PERSIST_DIR: /app/chroma_data
       API_KEY: ${API_KEY}
+      PYTHONPATH: /app/src
     volumes:
       - chroma_data:/app/chroma_data
       - ./alembic.ini:/app/alembic.ini          # монтируем конфиг для правок без пересборки
