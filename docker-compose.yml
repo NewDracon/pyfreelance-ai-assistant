@@ -1,24 +1,8 @@
-version: '3.8'
-
 services:
-  db:
-    image: postgres:15
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: orders_db
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U user -d orders_db"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-
-  app:
+  analyzer:
     build: .
+    container_name: freelance_analyzer
+    restart: unless-stopped
     ports:
       - "8000:8000"
     depends_on:
@@ -34,7 +18,13 @@ services:
       API_KEY: ${API_KEY}
     volumes:
       - chroma_data:/app/chroma_data
+    networks:
+      - freelance_network
 
 volumes:
-  postgres_data:
   chroma_data:
+networks:
+  freelance_network:
+    # Указываем, что сеть уже существует (ее создал парсер)
+    external: true
+    name: freelance_network

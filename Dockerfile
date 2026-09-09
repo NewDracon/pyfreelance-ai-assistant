@@ -7,7 +7,7 @@ RUN pip install --no-cache-dir poetry
 
 # Копируем только файлы зависимостей для кэширования
 COPY pyproject.toml poetry.lock ./
-RUN poetry config virtualenvs.create false && poetry install --no-interaction --no-ansi
+RUN poetry config virtualenvs.create false && poetry install --no-interaction --no-ansi --no-root --without dev
 
 # Копируем исходники
 COPY src/ /app/src/
