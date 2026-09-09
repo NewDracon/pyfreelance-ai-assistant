@@ -15,6 +15,8 @@ services:
       API_KEY: ${API_KEY}
     volumes:
       - chroma_data:/app/chroma_data
+      - ./alembic.ini:/app/alembic.ini          # монтируем конфиг для правок без пересборки
+      - ./alembic/versions:/app/alembic/versions # монтируем папку с миграциями на хост
     networks:
       - freelance_network
 
