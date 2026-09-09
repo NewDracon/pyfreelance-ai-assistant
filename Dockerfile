@@ -25,6 +25,7 @@ RUN poetry config virtualenvs.create false \
 COPY src/ /app/src/
 COPY alembic/ /app/alembic/
 COPY scripts/ /app/scripts/
+COPY alembic.ini /app/alembic.ini
 
 # Стартуем приложение
 CMD ["uvicorn", "src.freelance_assistant.main:app", "--host", "0.0.0.0", "--port", "8000"]
