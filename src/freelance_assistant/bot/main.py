@@ -31,11 +31,8 @@ def build_session() -> AiohttpSession | None:
         logger.info("Bot: proxy disabled, using direct connection")
         return None
 
-    # Импортируем здесь, чтобы не тянуть зависимость, если прокси не нужен
-    from aiohttp_socks import ProxyConnector
-
-    connector = ProxyConnector.from_url(proxy_url)
-    session = AiohttpSession(connector=connector)
+    # В aiogram 3.x прокси передаётся через параметр proxy
+    session = AiohttpSession(proxy=proxy_url)
     logger.info(f"Bot: using proxy {proxy_url}")
     return session
 
