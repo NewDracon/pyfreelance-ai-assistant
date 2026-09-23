@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     CHROMA_PERSIST_DIR: str = "./chroma_data"
     API_KEY: str
     BOT_TOKEN: str = ""
+    BOT_PROXY_URL: str = ""
 
 settings = Settings()
 
