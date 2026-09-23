@@ -16,6 +16,7 @@ class Settings(BaseSettings):
     EMBEDDING_MODEL: str = "text-embedding-ada-002"
     CHROMA_PERSIST_DIR: str = "./chroma_data"
     API_KEY: str
+    BOT_TOKEN: str = ""
 
 settings = Settings()
 
