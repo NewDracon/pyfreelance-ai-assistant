@@ -3,13 +3,15 @@ from freelance_assistant.models.bot_user import BotUser
 
 # Список категорий и их человекочитаемые названия
 CATEGORIES = [
-    ("backend_api", "Backend API"),
-    ("data_processing", "Data Processing"),
-    ("ml_nlp", "ML/NLP"),
-    ("automation", "Автоматизация"),
-    ("devops", "DevOps"),
-    ("web_scraping", "Веб-скрапинг"),
-    ("chatbots_ai_agents", "Чат-боты / AI-агенты"),
+    ("Backend API на Python", "Backend API"),
+    ("базы данных", "Data Processing"),
+    ("NLP, машинное обучение", "ML/NLP"),
+    ("скрипты и автоматизация", "Автоматизация"),
+    ("Python-развертывание, devops", "DevOps"),
+    ("парсинг", "Веб-скрапинг, парсинг"),
+    ("чат-боты", "Чат-боты"),
+    ("AI-агенты", "AI-агенты"),
+    ("другое", "Другое"),
 ]
 
 BUDGET_PRESETS = [
