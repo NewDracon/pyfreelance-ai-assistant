@@ -251,6 +251,26 @@ WHERE tgname = 'after_order_insert';
 
 > **Замечание про `DROP TRIGGER IF EXISTS`:** при первом применении скрипт выдаст *«триггера не существует, пропускается»* — это нормально, `CREATE TRIGGER` выполнится следом. Скрипт идемпотентен: его можно запускать многократно.
 
+### Настройка триггера на анализ нового заказа в БД (для бота)
+
+```sql
+CREATE OR REPLACE FUNCTION notify_order_analyzed()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.is_relevant = true THEN
+        PERFORM pg_notify('order_analyzed', NEW.order_id::text);
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS after_analysis_insert ON order_analyses;
+CREATE TRIGGER after_analysis_insert
+AFTER INSERT ON order_analyses
+FOR EACH ROW
+EXECUTE FUNCTION notify_order_analyzed();
+```
+
 ### Ограничение параллелизма
 
 Чтобы не упереться в rate limit LLM-провайдера при всплеске заказов (например, парсер вставил 50 записей за 10 секунд), слушатель **не запускает анализ напрямую**. Вместо этого:

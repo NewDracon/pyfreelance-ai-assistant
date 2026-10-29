@@ -16,6 +16,7 @@ from freelance_assistant.bot.handlers import (
     subscribe,
     help as help_h,
 )
+from freelance_assistant.bot.services.notifier import listen_order_analyzed
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -47,7 +48,8 @@ async def main():
     )
 
     dp = Dispatcher()
-    dp["session_factory"] = async_sessionmaker(engine, expire_on_commit=False)
+    session_factory = async_sessionmaker(engine, expire_on_commit=False)
+    dp["session_factory"] = session_factory
 
     # Регистрируем throttling middleware (если добавляли)
     from freelance_assistant.bot.middlewares.throttling import ThrottlingMiddleware
@@ -61,8 +63,25 @@ async def main():
     dp.include_router(subscribe.router)
     dp.include_router(help_h.router)
 
-    logger.info("Bot started")
-    await dp.start_polling(bot)
+    # Запускаем фоновый слушатель для рассылки уведомлений
+    logger.info("Starting background notifier...")
+    notifier_task = asyncio.create_task(
+        listen_order_analyzed(bot, session_factory)
+    )
+
+    try:
+        logger.info("Bot started")
+        await dp.start_polling(bot)
+    finally:
+        # При остановке бота аккуратно гасим фоновую задачу
+        logger.info("Stopping background notifier...")
+        notifier_task.cancel()
+        try:
+            await notifier_task
+        except asyncio.CancelledError:
+            pass
+        await bot.session.close()
+        await engine.dispose()
 
 
 if __name__ == "__main__":
